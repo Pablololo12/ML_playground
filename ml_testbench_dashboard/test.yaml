@@ -1,0 +1,36 @@
+global:
+  outputfile: test.json
+workloads:
+  - name: deeplab
+    model: models/deeplabv3_257_mv_gpu.tflite
+    tflite:
+      threads: [4]
+      options: [cpu, gpu, nnapi]
+      loops: 10
+    armnn:
+      input_shape: [257, 257, 3]
+      input_name: 'sub_7'
+      output_name: 'ResizeBilinear_3'
+      loops: 1
+      concurrent: true
+      quantized: false
+      fp16: false
+  - name: deeplabArmNNGpu
+    model: models/deeplabv3_257_mv_gpu.tflite
+    armnn:
+      input_shape: [257, 257, 3]
+      input_name: 'sub_7'
+      output_name: 'ResizeBilinear_3'
+      accelerator: 'Gpu'
+      loops: 1
+      concurrent: true
+      fp16: true
+  - name: deeplabArmNNCpu
+    model: models/deeplabv3_257_mv_gpu.tflite
+    armnn:
+      input_shape: [257, 257, 3]
+      input_name: 'sub_7'
+      output_name: 'ResizeBilinear_3'
+      accelerator: 'Cpu'
+      loops: 2
+      concurrent: true
